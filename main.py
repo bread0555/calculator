@@ -99,3 +99,7 @@ def main():
         myclass.num_to_hexa()
 
     print(myclass.fetch_output())
+
+
+if __name__ == "__main__":
+    main()
