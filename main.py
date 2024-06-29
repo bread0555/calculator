@@ -4,70 +4,91 @@
 # include functions in each of the three number systems to convert to numbers.
 
 class Number():
-    def __init__(self, i_a, i_b):
-        self.i_a = i_a
-        self.i_b = i_b
+    def __init__(self, input_a, input_b, input_operator):
+        self.input_a = input_a
+        self.input_b = input_b
+        self.input_operator = input_operator
         self.a = 0
         self.b = 0
-        self.r = 0
-        self.o = ""
+        self.result = 0
+        self.output = 0
+        self.base = 10
 
     def add(self):
-        return a + b
+        self.result = self.a + self.b
 
     def subt(self):
-        return a - b
+        self.result = self.a - self.b
 
     def mult(self):
-        return a * b
+        self.result = self.a * self.b
 
     def div(self):
-        return a // b, a % b
+        self.result = [self.a // self.b, self.a % self.b]
+
+    def operator_selector(self):
+        if self.input_operator == "+":
+            self.add()
+        elif self.input_operator == "-":
+            self.subt()
+        elif self.input_operator == "*":
+            self.mult()
+        elif self.input_operator == "/":
+            self.div()
+
+    def numsys_to_num(self):
+        self.a = int(self.input_a, self.base)
+        self.b = int(self.input_b, self.base)
+
+    def fetch_output(self):
+        return self.output
+
 
 class Binary(Number):
-    def __init__(self, i_a, i_b):
-        super().__init__(i_a, i_b)
-
-    def bin_to_num(self):
-        for i in range(len(str(self.i_a))):
-            self.a += (2 ** i) * int(str(self.i_a)[::-1][i])
-
-        for i in range(len(str(self.i_b))):
-            self.b += (2 ** i) * int(str(self.i_b)[::-1][i])
+    def __init__(self, input_a, input_b, i_operator):
+        super().__init__(input_a, input_b, i_operator)
+        self.base = 2
 
     def num_to_bin(self):
-        i = 0
-        while True:
-            if 2 ** i >= self.r:
-                break
-            i += 1
+        self.output = bin(self.result)
 
-        for num in range(i - 1, -1, -1):
-            if self.r >= 2 ** num:
-                self.r -= 2 ** num
-                self.o += "1"
-            else:
-                self.o += "0"
 
 class Decimal(Number):
-    def __init__(self, i_a, i_b):
-        super().__init__(i_a, i_b)
+    def __init__(self, i_a, i_b, i_o):
+        super().__init__(i_a, i_b, i_o)
 
+
+class Hexadecimal(Number):
+    def __init__(self, i_a, i_b, i_o):
+        super().__init__(i_a, i_b, i_o)
+        self.base = 16
+
+    def num_to_hexa(self):
+        self.output = hex(self.result)
 
 
 def main():
     print("Welcome to the programmer calculator!")
-    print("What would you like to calculate?")
-    print("1. Binary")
-    print("2. Decimal")
-    print("3. Hexadecimal")
-    selection = input()
-
-    if selection == "1":
-        print("What would you like to do?")
-        print("1. Add")
-        print("2. Subtract")
-        print("3. Multiply")
-        print("4. Divide")
-        selection = input()
-        if selection == "1":
+    print("Enter the first number:")
+    a = input()
+    print("Enter the second number:")
+    b = input()
+    print("Enter the operator: (+, -, *, /)")
+    operator = input()
+    print("Enter the number system you want to use:")
+    print("1. Binary\n2. Decimal\n3. Hexadecimal")
+    num_system = input()
+    if num_system == "1":
+        myclass = Binary(a, b, operator)
+        myclass.numsys_to_num()
+        myclass.operator_selector()
+        myclass.num_to_bin()
+    elif num_system == "2":
+        myclass = Decimal(a, b, operator)
+        myclass.operator_selector()
+    elif num_system == "3":
+        myclass = Hexadecimal(a, b, operator)
+        myclass.numsys_to_num()
+        myclass.operator_selector()
+        myclass.num_to_hexa()
+    print(myclass.fetch_output())
