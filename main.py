@@ -8,18 +8,20 @@ class Number():
         self.base = 10
 
     def add(self):
-        self.result = self.a + self.b
+        self.result = int(self.a) + int(self.b)
 
     def subt(self):
-        self.result = self.a - self.b
+        self.result = int(self.a) - int(self.b)
 
     def mult(self):
-        self.result = self.a * self.b
+        self.result = int(self.a) * int(self.b)
 
     def div(self):
-        self.result = self.a // self.b
+        self.result = int(self.a) // int(self.b)
 
-    def operator(self):
+    def operation(self):
+        print(self.a)
+        print(self.b)
         if self.operator == "+":
             self.add()
         elif self.operator == "-":
@@ -50,6 +52,9 @@ class Decimal(Number):
     def __init__(self, a, b, operator):
         super().__init__(a, b, operator)
 
+    def num_to_dec(self):
+        self.output = int(self.result)
+
 
 class Hexadecimal(Number):
     def __init__(self, a, b, operator):
@@ -74,22 +79,23 @@ def main():
 
     print("Enter the number system you want to use:")
     print("1. Binary\n2. Decimal\n3. Hexadecimal")
-    num_system = input()
+    num_system = int(input())
 
-    if num_system == "1":
+    if num_system == 1:
         myclass = Binary(a, b, operator)
         myclass.sys_to_num()
-        myclass.operator()
+        myclass.operation()
         myclass.num_to_bin()
 
-    elif num_system == "2":
+    elif num_system == 2:
         myclass = Decimal(a, b, operator)
-        myclass.operator()
+        myclass.operation()
+        myclass.num_to_dec()
 
-    elif num_system == "3":
+    elif num_system == 3:
         myclass = Hexadecimal(a, b, operator)
         myclass.sys_to_num()
-        myclass.operator()
+        myclass.operation()
         myclass.num_to_hexa()
 
     print(myclass.fetch_output())
