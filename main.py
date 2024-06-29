@@ -1,17 +1,10 @@
-# write code that adds or subtracts binary, decimal, and hexadecimal numbers.
-# include a menu that allows the user to select the type of number they want to enter.
-# include error trapping for any incorect input.
-# include functions in each of the three number systems to convert to numbers.
-
 class Number():
-    def __init__(self, input_a, input_b, input_operator):
-        self.input_a = input_a
-        self.input_b = input_b
-        self.input_operator = input_operator
-        self.a = 0
-        self.b = 0
+    def __init__(self, a, b, operator):
+        self.operator = operator
+        self.a = a
+        self.b = b
         self.result = 0
-        self.output = 0
+        self.output = ""
         self.base = 10
 
     def add(self):
@@ -24,29 +17,29 @@ class Number():
         self.result = self.a * self.b
 
     def div(self):
-        self.result = [self.a // self.b, self.a % self.b]
+        self.result = self.a // self.b
 
-    def operator_selector(self):
-        if self.input_operator == "+":
+    def operator(self):
+        if self.operator == "+":
             self.add()
-        elif self.input_operator == "-":
+        elif self.operator == "-":
             self.subt()
-        elif self.input_operator == "*":
+        elif self.operator == "*":
             self.mult()
-        elif self.input_operator == "/":
+        elif self.operator == "/":
             self.div()
 
-    def numsys_to_num(self):
-        self.a = int(self.input_a, self.base)
-        self.b = int(self.input_b, self.base)
+    def sys_to_num(self):
+        self.a = int(str(self.a), self.base)
+        self.b = int(str(self.b), self.base)
 
     def fetch_output(self):
         return self.output
 
 
 class Binary(Number):
-    def __init__(self, input_a, input_b, i_operator):
-        super().__init__(input_a, input_b, i_operator)
+    def __init__(self, a, b, operator):
+        super().__init__(a, b, operator)
         self.base = 2
 
     def num_to_bin(self):
@@ -54,13 +47,13 @@ class Binary(Number):
 
 
 class Decimal(Number):
-    def __init__(self, i_a, i_b, i_o):
-        super().__init__(i_a, i_b, i_o)
+    def __init__(self, a, b, operator):
+        super().__init__(a, b, operator)
 
 
 class Hexadecimal(Number):
-    def __init__(self, i_a, i_b, i_o):
-        super().__init__(i_a, i_b, i_o)
+    def __init__(self, a, b, operator):
+        super().__init__(a, b, operator)
         self.base = 16
 
     def num_to_hexa(self):
@@ -68,27 +61,35 @@ class Hexadecimal(Number):
 
 
 def main():
-    print("Welcome to the programmer calculator!")
+    print("Welcome to the programmer calculator.")
+
     print("Enter the first number:")
     a = input()
+
     print("Enter the second number:")
     b = input()
+
     print("Enter the operator: (+, -, *, /)")
     operator = input()
+
     print("Enter the number system you want to use:")
     print("1. Binary\n2. Decimal\n3. Hexadecimal")
     num_system = input()
+
     if num_system == "1":
         myclass = Binary(a, b, operator)
-        myclass.numsys_to_num()
-        myclass.operator_selector()
+        myclass.sys_to_num()
+        myclass.operator()
         myclass.num_to_bin()
+
     elif num_system == "2":
         myclass = Decimal(a, b, operator)
-        myclass.operator_selector()
+        myclass.operator()
+
     elif num_system == "3":
         myclass = Hexadecimal(a, b, operator)
-        myclass.numsys_to_num()
-        myclass.operator_selector()
+        myclass.sys_to_num()
+        myclass.operator()
         myclass.num_to_hexa()
+
     print(myclass.fetch_output())
