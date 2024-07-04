@@ -42,7 +42,7 @@ class Number():
         elif self.operator == "/":
             self.div()
 
-    def sys_to_num(self):
+    def sys_to_num(self, variable):
         self.a = int(str(self.a), self.base)
         self.b = int(str(self.b), self.base)
 
@@ -53,13 +53,61 @@ class Number():
         pass
 
 
+def sys_to_num(self, variable):
+    output = 0
+    variable = str(variable)
+    for i in range(len(variable)):
+        if "0" <= variable[i] <= "9":
+            output += int(variable[i])
+        else:
+            output += (ord(variable[i]) - ord("a"))
+
 class Binary(Number):
     def __init__(self, a, b, operator):
         super().__init__(a, b, operator)
         self.base = 2
 
+    def sys_to_num(self, variable):
+        output = 0
+        variable = str(variable)[::-1]
+        for i in range(len(variable)):
+            output += int(variable[i]) * (2 ** i)
+        return output
+
+    def add(self, a, b):
+        if len(a) < len(b):
+            a = "0" * (len(b) - len(a)) + a
+        elif len(b) < len(a):
+            b = "0" * (len(a) - len(b)) + b
+
+        a = a[::-1]
+        b = b[::-1]
+
+        spare = 0
+        output = ""
+
+        for i in range(len(a)):
+            result = int(a[i]) + int(b[i]) + spare
+            if result == 0:
+                output += "0"
+                spare = 0
+            elif result == 1:
+                output += "1"
+                spare = 0
+            elif result == 2:
+                output += "0"
+                spare = 1
+            elif result == 3:
+                output += "1"
+                spare = 1
+
+        if spare == 1:
+            output += "1"
+
+        return(output[::-1])
+
     def num_to_bin(self):
-        self.result = bin(self.result)
+        self.result = bin(int(self.result))
 
 
 class Decimal(Number):
@@ -82,8 +130,18 @@ class Hexadecimal(Number):
         super().__init__(a, b, operator)
         self.base = 16
 
+    def sys_to_num(self, variable):
+        output = 0
+        variable = str(variable)
+        for i in range(len(variable)):
+            if "0" <= variable[i] <= "9":
+                output += int(variable[i])
+            else:
+                output += (ord(variable[i]) - ord("a"))
+
+    
     def num_to_hexa(self):
-        self.result = hex(self.result)
+        self.result = hex(int(self.result))
 
 
 def predict_ns(a, b):
@@ -142,7 +200,7 @@ def main():
     else:
         return
 
-    print(f"\nIn {num_systems[num_system]}, {a} {operator} {b} is:\n{myclass.fetch_output()")
+    print(f"\nIn {num_systems[num_system]}, {a} {operator} {b} is:\n{myclass.fetch_output()}")
 
 
 if __name__ == "__main__":
