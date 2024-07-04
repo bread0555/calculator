@@ -4,14 +4,33 @@ from main import Number
 class Binary(Number):
     def __init__(self, a, b, operator):
         super().__init__(a, b, operator)
-        self.base = 2
+        self.base = 2 # not needed if not using int() builtin function
 
-    def sys_to_num(self, variable):
+    def decimal(self, variable):
         output = 0
         variable = str(variable)[::-1]
         for i in range(len(variable)):
             output += int(variable[i]) * (2 ** i)
+
         return output
+
+    def binary(self, variable):
+        i = 0
+        while True:
+            if 2 ** i >= variable:
+                break
+            i += 1
+
+        output = ""
+        for i in range(i - 1, -1, -1):
+            if variable >= 2 ** i:
+                output += "1"
+                variable -= 2 ** i
+            else:
+                output += "0"
+
+        return output
+
 
     def add(self, a, b):
         a = str(a)
@@ -27,7 +46,6 @@ class Binary(Number):
 
         spare = 0
         output = ""
-
         for i in range(len(a)):
             result = int(a[i]) + int(b[i]) + spare
             if result == 0:
@@ -59,7 +77,6 @@ class Binary(Number):
 
         b = b[::-1]
         b_new = ""
-
         for i in range(len(b)):
             if b[i] == "0":
                 b_new += "1"
@@ -67,14 +84,12 @@ class Binary(Number):
                 b_new += "0"
 
         b_new = b_new[::-1]
-
         b_new = self.add(b_new, "1")
 
         return self.add(a, b_new)[-len(b):]
 
     def mult(self, a, b):
-        
+        pass
 
-
-    def num_to_bin(self):
-        self.result = bin(int(self.result))
+    def div(self, a, b):
+        pass
