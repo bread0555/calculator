@@ -1,16 +1,29 @@
-from main import Number
-
-
-class Decimal(Number):
+class Decimal():
     def __init__(self, a, b, operator):
-        super().__init__(a, b, operator)
-        self.base = 10
+        self.a = a
+        self.b = b
+        self.operator = operator
 
-    def div(self):
-        self.result = round(int(self.a) / int(self.b), 2)
+    def decimal(self, variable):
+        output = 0
+        variable = str(variable)[::-1]
+        for i in range(len(variable)):
+            output += int(variable[i]) * (2 ** i)
+        return output
 
-    def num_to_dec(self):
-        if int(self.result) == float(self.result):
-            self.result = int(self.result)
-        else:
-            self.result = float(self.result)
+    def binary(self, variable, min_length: 0):
+        i = 0
+        while True:
+            if 2 ** i >= variable:
+                break
+            i += 1
+        output = ""
+        for j in range(j - 1, -1, -1):
+            if variable >= 2 ** j:
+                output += "1"
+                variable -= 2 ** j
+            else:
+                output += "0"
+        if min_length > len(output):
+            output = "0" * (min_length - len(output)) + output
+        return output
