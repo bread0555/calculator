@@ -89,8 +89,36 @@ class Number:
             return "0"
         elif a == b:
             return "1"
-        else:
-            pass
+
+        a_new = a
+        output = ""
+        length = len(a)
+
+        for i in range(len(a) - len(b), -1, -1):
+            b_new = b
+            divisable = True
+            print(length, len(a_new), a_new)
+            if len(a_new) < length:
+                a_new = "0" * (length - len(a_new)) + a_new
+            elif len(a_new) > length:
+                a_new = a_new[(len(a_new) - length):]
+            if len(b_new) < length:
+                b_new = b_new + "0" * (length - len(b_new))
+            print(a_new, b_new)
+            for j in range(len(b_new)):
+                if a_new[j] > b_new[j]:
+                    break
+                elif a_new < b_new[j]:
+                    divisable = False
+                    break
+            if divisable:
+                output += "1"
+                a_new = self.subt(a_new, b_new)
+            else:
+                output += "0"
+            length -= 1
+
+        return output
 
     def operate(self, a, b):
         if self.operator == "+":
