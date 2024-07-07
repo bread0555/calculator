@@ -97,20 +97,20 @@ class Number:
         for i in range(len(a) - len(b), -1, -1):
             b_new = b
             divisable = True
-            print(length, len(a_new), a_new)
+            b_new = b_new + "0" * i
+            print(b_new)
             if len(a_new) < length:
                 a_new = "0" * (length - len(a_new)) + a_new
             elif len(a_new) > length:
-                a_new = a_new[(len(a_new) - length):]
-            if len(b_new) < length:
-                b_new = b_new + "0" * (length - len(b_new))
+                b_new = "0" * (len(a_new) - len(b_new)) + b_new
             print(a_new, b_new)
             for j in range(len(b_new)):
                 if a_new[j] > b_new[j]:
                     break
-                elif a_new < b_new[j]:
+                elif a_new[j] < b_new[j]:
                     divisable = False
                     break
+            print(divisable)
             if divisable:
                 output += "1"
                 a_new = self.subt(a_new, b_new)
@@ -119,6 +119,7 @@ class Number:
             length -= 1
 
         return output
+
 
     def operate(self, a, b):
         if self.operator == "+":
