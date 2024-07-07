@@ -127,6 +127,3 @@ class Number:
             self.mult(a, b)
         elif self.operator == "/":
             self.div(a, b)
-
-
-number = Number(1101, 1011, "+")
