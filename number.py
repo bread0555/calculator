@@ -1,4 +1,5 @@
 class Number:
+
     def __init__(self, a, b, operator):
         self.a = a
         self.b = b
@@ -116,7 +117,6 @@ class Number:
             length -= 1
 
         return output
-
 
     def operate(self, a, b):
         if self.operator == "+":
