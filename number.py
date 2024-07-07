@@ -98,19 +98,16 @@ class Number:
             b_new = b
             divisable = True
             b_new = b_new + "0" * i
-            print(b_new)
             if len(a_new) < length:
                 a_new = "0" * (length - len(a_new)) + a_new
             elif len(a_new) > length:
                 b_new = "0" * (len(a_new) - len(b_new)) + b_new
-            print(a_new, b_new)
             for j in range(len(b_new)):
                 if a_new[j] > b_new[j]:
                     break
                 elif a_new[j] < b_new[j]:
                     divisable = False
                     break
-            print(divisable)
             if divisable:
                 output += "1"
                 a_new = self.subt(a_new, b_new)
