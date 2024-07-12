@@ -1,8 +1,153 @@
-num_systems = {
-    1: "binary",
-    2: "decimal",
-    3: "hexadecimal"
-}
+class Number:
+
+    def __init__(self, a, b, operator):
+        self.a = a
+        self.b = b
+        self.operator = operator
+
+    def align_binary(self, binary_a, binary_b):
+        if len(binary_a) < len(binary_b):
+            binary_a = "0" * (len(binary_b) - len(binary_a)) + binary_a
+        elif len(b) < len(binary_a):
+            binary_b = "0" * (len(binary_a) - len(binary_b)) + binary_b
+        return binary_a, binary_b
+
+    def ones_loc(self, binary):
+        for i in range(len(binary)):
+            if binary[i] == "1":
+                return i
+        return 0
+
+    def add(self, addend_a, addend_b):
+        addend_a = str(addend_a)
+        addend_b = str(addend_b)
+
+        addend_a, addend_b = self.align_binary(addend_a, addend_b)
+
+        addend_a = addend_a[::-1]
+        addend_b = addend_b[::-1]
+        carry = 0
+        total = ""  # cant use sum, re. builtin function
+
+        for i in range(len(addend_a)):
+            result = int(addend_a[i]) + int(addend_b[i]) + carry
+            if result == 0:
+                total += "0"
+                carry = 0
+            elif result == 1:
+                total += "1"
+                carry = 0
+            elif result == 2:
+                total += "0"
+                carry = 1
+            elif result == 3:
+                total += "1"
+                carry = 1
+
+        if carry == 1:
+            total += "1"
+
+        return total[::-1]
+
+    def subt(self, minuend, subtrahend):
+        minuend = str(minuend)
+        subtrahend = str(subtrahend)
+
+        if len(minuend) < len(subtrahend):
+            minuend = "0" * (len(subtrahend) - len(minuend)) + minuend
+        elif len(subtrahend) < len(minuend):
+            subtrahend = "0" * (len(minuend) - len(subtrahend)) + subtrahend
+
+        subtrahend = subtrahend[::-1]
+        complement = ""
+
+        for i in range(len(subtrahend)):  # cant minus, possible trailing 0s
+            if subtrahend[i] == "0":
+                complement += "1"
+            elif subtrahend[i] == "1":
+                complement += "0"
+
+        complement = self.add(complement[::-1], "1")
+        difference = self.add(minuend, complement)[-len(subtrahend):]
+
+        return difference[self.ones_loc(difference):]
+
+    def mult(self, multiplicand, multiplier):
+        multiplicand = str(multiplicand)
+        multiplier = str(multiplier)[::-1]
+        product = 0
+
+        for i in range(len(multiplier)):
+            if multiplier[i] == "1":
+                product = self.add(product, multiplicand + "0" * i)
+
+        return str(product)
+
+    def div(self, dividend, divisor):
+        dividend = str(dividend)
+        divisor = str(divisor)
+
+        if divisor == "0":
+            return "0"
+        elif divisor == "1":
+            return dividend
+        elif len(dividend) < len(divisor):
+            return "0"
+        elif dividend == divisor:
+            return "1"
+
+        quotient = ""
+        length = len(dividend)
+
+        for i in range(len(dividend) - len(divisor), -1, -1):
+            div_temp = divisor
+            divisible = True
+            div_temp = div_temp + "0" * i
+            if len(dividend) < length:
+                dividend = "0" * (length - len(dividend)) + dividend
+            elif len(dividend) > length:
+                div_temp = "0" * (len(dividend) - len(div_temp)) + div_temp
+            for j in range(len(div_temp)):
+                if dividend[j] > div_temp[j]:
+                    break
+                elif dividend[j] < div_temp[j]:
+                    divisible = False
+                    break
+
+            if divisible:
+                quotient += "1"
+                dividend = self.subt(dividend, div_temp)
+            else:
+                quotient += "0"
+            length -= 1
+
+        return quotient[self.ones_loc(quotient):]
+
+    def operate(self, a, b):
+        if self.operator == "+":
+            self.add(a, b)
+        elif self.operator == "-":
+            self.subt(a, b)
+        elif self.operator == "*":
+            self.mult(a, b)
+        elif self.operator == "/":
+            self.div(a, b)
+
+
+# def predict_ns(a, b):
+#     try:
+#         test = Binary(a, b, None)
+#         test.sys_to_num()
+#         return 1
+#     except ValueError:
+#         try:
+#             test = Decimal(a, b, None)
+#             test.sys_to_num()
+#             return 2
+#         except ValueError:
+#             return 3
+
+num_systems = {1: "binary", 2: "decimal", 3: "hexadecimal"}
 
 operations = {
     "+": "addition",
@@ -10,152 +155,6 @@ operations = {
     "*": "multiplication",
     "/": "division"
 }
-
-
-class Number():
-    def __init__(self, a, b, operator):
-        self.a = a
-        self.b = b
-        self.operator = operator
-        self.result = None
-        self.base = 10
-
-    def add(self):
-        self.result = int(self.a) + int(self.b)
-
-    def subt(self):
-        self.result = int(self.a) - int(self.b)
-
-    def mult(self):
-        self.result = int(self.a) * int(self.b)
-
-    def div(self):
-        self.result = int(self.a) // int(self.b)
-
-    def operation(self):
-        if self.operator == "+":
-            self.add()
-        elif self.operator == "-":
-            self.subt()
-        elif self.operator == "*":
-            self.mult()
-        elif self.operator == "/":
-            self.div()
-
-    def sys_to_num(self, variable):
-        self.a = int(str(self.a), self.base)
-        self.b = int(str(self.b), self.base)
-
-    def fetch_output(self):
-        return self.result
-
-    def num_to_sys(self):
-        pass
-
-
-def sys_to_num(self, variable):
-    output = 0
-    variable = str(variable)
-    for i in range(len(variable)):
-        if "0" <= variable[i] <= "9":
-            output += int(variable[i])
-        else:
-            output += (ord(variable[i]) - ord("a"))
-
-class Binary(Number):
-    def __init__(self, a, b, operator):
-        super().__init__(a, b, operator)
-        self.base = 2
-
-    def sys_to_num(self, variable):
-        output = 0
-        variable = str(variable)[::-1]
-        for i in range(len(variable)):
-            output += int(variable[i]) * (2 ** i)
-        return output
-
-    def add(self, a, b):
-        if len(a) < len(b):
-            a = "0" * (len(b) - len(a)) + a
-        elif len(b) < len(a):
-            b = "0" * (len(a) - len(b)) + b
-
-        a = a[::-1]
-        b = b[::-1]
-
-        spare = 0
-        output = ""
-
-        for i in range(len(a)):
-            result = int(a[i]) + int(b[i]) + spare
-            if result == 0:
-                output += "0"
-                spare = 0
-            elif result == 1:
-                output += "1"
-                spare = 0
-            elif result == 2:
-                output += "0"
-                spare = 1
-            elif result == 3:
-                output += "1"
-                spare = 1
-
-        if spare == 1:
-            output += "1"
-
-        return(output[::-1])
-
-    def num_to_bin(self):
-        self.result = bin(int(self.result))
-
-
-class Decimal(Number):
-    def __init__(self, a, b, operator):
-        super().__init__(a, b, operator)
-        self.base = 10
-
-    def div(self):
-        self.result = round(int(self.a) / int(self.b), 2)
-
-    def num_to_dec(self):
-        if int(self.result) == float(self.result):
-            self.result = int(self.result)
-        else:
-            self.result = float(self.result)
-
-
-class Hexadecimal(Number):
-    def __init__(self, a, b, operator):
-        super().__init__(a, b, operator)
-        self.base = 16
-
-    def sys_to_num(self, variable):
-        output = 0
-        variable = str(variable)
-        for i in range(len(variable)):
-            if "0" <= variable[i] <= "9":
-                output += int(variable[i])
-            else:
-                output += (ord(variable[i]) - ord("a"))
-
-    
-    def num_to_hexa(self):
-        self.result = hex(int(self.result))
-
-
-def predict_ns(a, b):
-    try:
-        test = Binary(a, b, None)
-        test.sys_to_num()
-        return 1
-    except ValueError:
-        try:
-            test = Decimal(a, b, None)
-            test.sys_to_num()
-            return 2
-        except ValueError:
-            return 3
 
 
 def main():
@@ -171,7 +170,9 @@ def main():
     operator = input().strip()
 
     num_system = predict_ns(a, b)
-    print(f"Are you trying to do {num_systems[num_system]} {operations[operator]}?")
+    print(
+        f"Are you trying to do {num_systems[num_system]} {operations[operator]}?"
+    )
     predicted_ns = input("Y/N: ")
 
     if predicted_ns.upper() != "Y":
@@ -200,7 +201,10 @@ def main():
     else:
         return
 
-    print(f"\nIn {num_systems[num_system]}, {a} {operator} {b} is:\n{myclass.fetch_output()}")
+    print(
+        f"\nIn {num_systems[num_system]}, {a} {operator} {b} is:\n{myclass.fetch_output()}"
+    )
+
 
 
 if __name__ == "__main__":

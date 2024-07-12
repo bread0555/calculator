@@ -1,122 +1,131 @@
-class Number:
+class Number: # Class for binary calculation, inherited class
 
     def __init__(self, a, b, operator):
         self.a = a
         self.b = b
         self.operator = operator
 
-    def add(self, a, b):
-        a = str(a)
-        b = str(b)
+    def align_binary(self, binary_a, binary_b):
+        if len(binary_a) < len(binary_b):
+            binary_a = "0" * (len(binary_b) - len(binary_a)) + binary_a
+        elif len(b) < len(binary_a):
+            binary_b = "0" * (len(binary_a) - len(binary_b)) + binary_b
+        return binary_a, binary_b
 
-        if len(a) < len(b):
-            a = "0" * (len(b) - len(a)) + a
-        elif len(b) < len(a):
-            b = "0" * (len(a) - len(b)) + b
+    def ones_loc(self, binary):
+        for i in range(len(binary)):
+            if binary[i] == "1":
+                return i
+        return 0
 
-        a = a[::-1]
-        b = b[::-1]
-        spare = 0
-        output = ""
+    def add(self, addend_a, addend_b):
+        addend_a = str(addend_a)
+        addend_b = str(addend_b)
 
-        for i in range(len(a)):
-            result = int(a[i]) + int(b[i]) + spare
+        addend_a, addend_b = self.align_binary(addend_a, addend_b)
+
+        addend_a = addend_a[::-1]
+        addend_b = addend_b[::-1]
+        carry = 0
+        total = ""  # cant use sum as var name, re. builtin function
+
+        for i in range(len(addend_a)):
+            result = int(addend_a[i]) + int(addend_b[i]) + carry
             if result == 0:
-                output += "0"
-                spare = 0
+                total += "0"
+                carry = 0
             elif result == 1:
-                output += "1"
-                spare = 0
+                total += "1"
+                carry = 0
             elif result == 2:
-                output += "0"
-                spare = 1
+                total += "0"
+                carry = 1
             elif result == 3:
-                output += "1"
-                spare = 1
+                total += "1"
+                carry = 1
 
-        if spare == 1:
-            output += "1"
+        if carry == 1:
+            total += "1"
 
-        return output[::-1]
+        return total[::-1]
 
-    def subt(self, a, b):
-        a = str(a)
-        b = str(b)
+    def subt(self, minuend, subtrahend):
+        minuend = str(minuend)
+        subtrahend = str(subtrahend)
 
-        if len(a) < len(b):
-            a = "0" * (len(b) - len(a)) + a
-        elif len(b) < len(a):
-            b = "0" * (len(a) - len(b)) + b
+        if len(minuend) < len(subtrahend):
+            minuend = "0" * (len(subtrahend) - len(minuend)) + minuend
+        elif len(subtrahend) < len(minuend):
+            subtrahend = "0" * (len(minuend) - len(subtrahend)) + subtrahend
 
-        b = b[::-1]
-        b_new = ""
+        subtrahend = subtrahend[::-1]
+        complement = ""
 
-        for i in range(len(b)):
-            if b[i] == "0":
-                b_new += "1"
-            elif b[i] == "1":
-                b_new += "0"
+        for i in range(len(subtrahend)):  # cant minus as int, possible trailing 0s
+            if subtrahend[i] == "0":
+                complement += "1"
+            elif subtrahend[i] == "1":
+                complement += "0"
 
-        b_new = self.add(b_new[::-1], "1")
-        output = self.add(a, b_new)[-len(b):]
+        complement = self.add(complement[::-1], "1")
+        difference = self.add(minuend, complement)[-len(subtrahend):]
 
-        one_location = 0
+        ones_loc = self.ones_loc(difference)
 
-        for i in range(len(output)):
-            if output[i] == "1":
-                one_location = i
-                break
+        return difference[ones_loc:]
 
-        return output[one_location:]
+    def mult(self, multiplicand, multiplier):
+        multiplicand = str(multiplicand)
+        multiplier = str(multiplier)[::-1]
+        product = 0
 
-    def mult(self, a, b):
-        a = str(a)
-        b = str(b)[::-1]
-        output = 0
+        for i in range(len(multiplier)):
+            if multiplier[i] == "1":
+                product = self.add(product, multiplicand + "0" * i)
 
-        for i in range(len(b)):
-            if b[i] == "1":
-                output = self.add(output, a + "0" * i)
+        return str(product)
 
-        return str(output)
+    def div(self, dividend, divisor):
+        dividend = str(dividend)
+        divisor = str(divisor)
 
-    def div(self, a, b):
-        a = str(a)
-        b = str(b)
-
-        if b == 0:
-            return 0
-        elif len(a) < len(b):
+        if divisor == "0":
             return "0"
-        elif a == b:
+        elif divisor == "1":
+            return dividend
+        elif len(dividend) < len(divisor):
+            return "0"
+        elif dividend == divisor:
             return "1"
 
-        a_new = a
-        output = ""
-        length = len(a)
+        quotient = ""
+        length = len(dividend)
 
-        for i in range(len(a) - len(b), -1, -1):
-            b_new = b
-            divisable = True
-            b_new = b_new + "0" * i
-            if len(a_new) < length:
-                a_new = "0" * (length - len(a_new)) + a_new
-            elif len(a_new) > length:
-                b_new = "0" * (len(a_new) - len(b_new)) + b_new
-            for j in range(len(b_new)):
-                if a_new[j] > b_new[j]:
+        for i in range(len(dividend) - len(divisor), -1, -1):
+            div_temp = divisor
+            divisible = True
+            div_temp = div_temp + "0" * i
+            if len(dividend) < length:
+                dividend = "0" * (length - len(dividend)) + dividend
+            elif len(dividend) > length:
+                div_temp = "0" * (len(dividend) - len(div_temp)) + div_temp
+            for j in range(len(div_temp)):
+                if dividend[j] > div_temp[j]:
                     break
-                elif a_new[j] < b_new[j]:
-                    divisable = False
+                elif dividend[j] < div_temp[j]:
+                    divisible = False
                     break
-            if divisable:
-                output += "1"
-                a_new = self.subt(a_new, b_new)
+
+            if divisible:
+                quotient += "1"
+                dividend = self.subt(dividend, div_temp)
             else:
-                output += "0"
+                quotient += "0"
             length -= 1
 
-        return output
+        ones_loc = self.ones_loc(quotient)
+
+        return quotient[ones_loc:]
 
     def operate(self, a, b):
         if self.operator == "+":

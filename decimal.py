@@ -1,29 +1,38 @@
-class Decimal():
+from number import Number
+
+
+class Decimal(Number):
+
     def __init__(self, a, b, operator):
-        self.a = a
-        self.b = b
-        self.operator = operator
+        super().__init__(a, b, operator)
 
-    def decimal(self, variable):
+    def decimal(self, binary):
         output = 0
-        variable = str(variable)[::-1]
-        for i in range(len(variable)):
-            output += int(variable[i]) * (2 ** i)
-        return output
+        binary = str(binary)[::-1]
+        for i in range(len(binary)):
+            output += int(binary[i]) * (2**i)
 
-    def binary(self, variable, min_length: 0):
-        i = 0
-        while True:
-            if 2 ** i >= variable:
+        return str(output)
+
+    def binary(self, decimal):
+        ceiling = 0
+        for i in range(decimal):
+            if 2**i >= decimal:
+                ceiling = i
                 break
-            i += 1
+
         output = ""
-        for j in range(j - 1, -1, -1):
-            if variable >= 2 ** j:
+        for i in range(ceiling - 1, -1, -1):
+            if decimal >= 2**i:
                 output += "1"
-                variable -= 2 ** j
+                decimal -= 2**i
             else:
                 output += "0"
-        if min_length > len(output):
-            output = "0" * (min_length - len(output)) + output
+
         return output
+
+
+if __name__ == "__main__": # testing
+    d = Decimal("1", "2", "+")
+    print(d.decimal(10001111))
+    print(d.binary(143))

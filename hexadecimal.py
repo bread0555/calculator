@@ -1,72 +1,58 @@
-class Binary:
+from number import Number
+
+
+class Hexadecimal(Number):
     def __init__(self, a, b, operator):
-        pass
-    
-    def binary(self, variable, min_length: 0):
-        i = 0
-        while True:
-            if 2 ** i >= variable:
-                break
-            i += 1
+        super().__init__(a, b, operator)
+        self.hexbin = {
+            "0": "0000",
+            "1": "0001",
+            "2": "0010",
+            "3": "0011",
+            "4": "0100",
+            "5": "0101",
+            "6": "0110",
+            "7": "0111",
+            "8": "1000",
+            "9": "1001",
+            "A": "1010",
+            "B": "1011",
+            "C": "1100",
+            "D": "1101",
+            "E": "1110",
+            "F": "1111"
+        }
+
+    def hexadecimal(self, binary):
+        binary = "0" * (4 - len(binary) % 4) + binary
+
+        binary_ls = []
+        while binary:
+            binary_ls.append(binary[:4])
+            binary = binary[4:]
+
+        hexbin_keys = list(self.hexbin.keys())
+        hexbin_values = list(self.hexbin.values())
 
         output = ""
-        for i in range(i - 1, -1, -1):
-            if variable >= 2 ** i:
-                output += "1"
-                variable -= 2 ** i
-            else:
-                output += "0"
-
-        if min_length > len(output):
-            output = "0" * (min_length - len(output)) + output
+        for i in binary_ls:
+            output += hexbin_keys[hexbin_values.index(i)]
 
         return output
 
-
-class Hexadecimal():
-    def __init__(self, a, b, operator):
-        self.a = a
-        self.b = b
-        self.operator = operator
-
-    def decimal(self, variable):
-        output = 0
-        variable = str(variable)[::-1].lower()
-        for i in range(len(variable)):
-            if "0" <= variable[i] <= "9":
-                output += int(variable[i]) * (16 ** i)
-            else:
-                output += (ord(variable[i]) - ord("a") + 10) * (16 ** i)
-
-        return output
-
-    def binary(self, variable):
+    def binary(self, hexadecimal):
         output = ""
-        for i in range(len(variable)):
-            if "0" <= variable[i] <= "9":
-                output += str(Binary.binary(int(variable[i]), 4))
-            else:
-                output += str(Binary.binary(ord(variable[i]) - ord("a") + 10, 4))
+        for i in hexadecimal:
+            output += self.hexbin[i]
 
-        return output
+        ones_loc = self.ones_loc(output)
 
-    def hexadecimal(self, variable):
-        quotient = variable
-        remainder = 0
-        output = ""
-        while quotient != 0:
-            remainder = quotient % 16
-            if 0 <= remainder <= 9:
-                output += str(remainder)
-            else:
-                output += chr(remainder + ord("a") - 10)
-            quotient = quotient // 16
+        return output[ones_loc:]
 
-        return output[::-1]
+def main():
+    h = Hexadecimal(None, None, None)
+    print(h.hexadecimal("1101011101"))
+    print(h.binary("35D"))
 
-
-
-
-# new goal:
-# instead of converting to decimals to perform calculations
-# convert to binary to perform calculations instead
+if __name__ == "__main__":
+    main()
