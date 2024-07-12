@@ -32,7 +32,7 @@ class Decimal(Number):
         return output
 
 
-if __name__ == "__main__": # testing
+if __name__ == "__main__":  # testing
     d = Decimal("1", "2", "+")
     print(d.decimal(10001111))
     print(d.binary(143))

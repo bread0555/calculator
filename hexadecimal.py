@@ -2,6 +2,7 @@ from number import Number
 
 
 class Hexadecimal(Number):
+
     def __init__(self, a, b, operator):
         super().__init__(a, b, operator)
         self.hexbin = {
@@ -49,10 +50,12 @@ class Hexadecimal(Number):
 
         return output[ones_loc:]
 
+
 def main():
     h = Hexadecimal(None, None, None)
     print(h.hexadecimal("1101011101"))
     print(h.binary("35D"))
+
 
 if __name__ == "__main__":
     main()

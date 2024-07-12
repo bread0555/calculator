@@ -1,4 +1,4 @@
-class Number: # Class for binary calculation, inherited class
+class Number:
 
     def __init__(self, a, b, operator):
         self.a = a
@@ -8,7 +8,7 @@ class Number: # Class for binary calculation, inherited class
     def align_binary(self, binary_a, binary_b):
         if len(binary_a) < len(binary_b):
             binary_a = "0" * (len(binary_b) - len(binary_a)) + binary_a
-        elif len(b) < len(binary_a):
+        elif len(binary_b) < len(binary_a):
             binary_b = "0" * (len(binary_a) - len(binary_b)) + binary_b
         return binary_a, binary_b
 
