@@ -6,7 +6,7 @@ class Decimal(Number):
     def __init__(self, a, b, operator):
         super().__init__(a, b, operator)
 
-    def decimal(self, binary):
+    def bin_to_dec(self, binary):
         output = 0
         binary = str(binary)[::-1]
         for i in range(len(binary)):
@@ -14,7 +14,7 @@ class Decimal(Number):
 
         return str(output)
 
-    def binary(self, decimal):
+    def dec_to_bin(self, decimal):
         ceiling = 0
         for i in range(decimal):
             if 2**i >= decimal:
@@ -34,5 +34,5 @@ class Decimal(Number):
 
 if __name__ == "__main__":  # testing
     d = Decimal("1", "2", "+")
-    print(d.decimal(10001111))
-    print(d.binary(143))
+    print(d.bin_to_dec(10001111))
+    print(d.dec_to_bin(143))

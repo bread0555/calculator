@@ -24,7 +24,7 @@ class Hexadecimal(Number):
             "F": "1111"
         }
 
-    def hexadecimal(self, binary):
+    def bin_to_hex(self, binary):
         binary = "0" * (4 - len(binary) % 4) + binary
 
         binary_ls = []
@@ -41,7 +41,7 @@ class Hexadecimal(Number):
 
         return output
 
-    def binary(self, hexadecimal):
+    def hex_to_bin(self, hexadecimal):
         output = ""
         for i in hexadecimal:
             output += self.hexbin[i]
@@ -53,8 +53,8 @@ class Hexadecimal(Number):
 
 def main():
     h = Hexadecimal(None, None, None)
-    print(h.hexadecimal("1101011101"))
-    print(h.binary("35D"))
+    print(h.bin_to_hex("1101011101"))
+    print(h.hex_to_bin("35D"))
 
 
 if __name__ == "__main__":
