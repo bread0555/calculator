@@ -6,7 +6,7 @@ class Number:
         self.operator = operator
         self.result = ""
 
-    def align_binary(self, binary_a: str, binary_b: str) -> (str, str):
+    def align_binary(self, binary_a: str, binary_b: str) -> tuple[str, str]:
         if len(binary_a) < len(binary_b):
             binary_a = "0" * (len(binary_b) - len(binary_a)) + binary_a
         elif len(binary_b) < len(binary_a):
@@ -289,10 +289,38 @@ def main(): # add error trapping before data sent off to classes to calculate
     elif num_sys == 3:
         calc = Hexadecimal(a, b, operator)
 
-    calc.operate()
+    try:
+        calc.operate()
+    except ValueError:
+        print("Calculation could not be performed: Invalid input.")
 
-    print(f"\nIn {num_systems[num_sys]}, {a} {operator} {b} is")
-    print(calc.result)
+    print(f"\nIn {num_systems[num_sys]}, {a} {operator} {b} = {calc.result}")
 
 if __name__ == "__main__":
     main()
+
+a = "0"
+b = "1"
+
+chars = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"]
+
+# valid input checking
+if (a.isdecimal() and "\\u" not in a 
+    and b.isdecimal() and "\\u" not in b):
+    print("Calculation could not be performed: Invalid decimal.")
+
+# remove 0 and 1 from string, checks that there is nothing remaining
+if (a.replace("0", "").replace("1", "") == "" and
+    b.replace("0", "").replace("1", "") == ""):
+    binary = True
+
+# checks if string is decimal, also checks that no unicode characters present
+if (a.isdecimal() and
+    b.isdecimal() and
+    "\\u" not in a and
+    "\\u" not in b):
+    decimal = True
+
+if 
+
+if 
