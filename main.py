@@ -6,12 +6,12 @@ class Number:
         self.operator = operator
         self.result = ""
 
-    def align_binary(self, binary_a: str, binary_b: str) -> tuple[str, str]:
-        if len(binary_a) < len(binary_b):
-            binary_a = "0" * (len(binary_b) - len(binary_a)) + binary_a
-        elif len(binary_b) < len(binary_a):
-            binary_b = "0" * (len(binary_a) - len(binary_b)) + binary_b
-        return binary_a, binary_b
+    def align_bin(self, bin_a: str, bin_b: str) -> tuple[str, str]:
+        if len(bin_a) < len(bin_b):
+            bin_a = "0" * (len(bin_b) - len(bin_a)) + bin_a
+        elif len(bin_b) < len(bin_a):
+            bin_b = "0" * (len(bin_a) - len(bin_b)) + bin_b
+        return bin_a, bin_b
 
     def ones_loc(self, binary: str) -> int:
         for i in range(len(binary)):
@@ -20,7 +20,7 @@ class Number:
         return 0
 
     def add(self, addend_a: str, addend_b: str) -> str:
-        addend_a, addend_b = self.align_binary(addend_a, addend_b)
+        addend_a, addend_b = self.align_bin(addend_a, addend_b)
 
         addend_a = addend_a[::-1]
         addend_b = addend_b[::-1]
@@ -48,12 +48,13 @@ class Number:
         return total[::-1]
 
     def subt(self, minuend: str, subtrahend: str) -> str:
-        minuend, subtrahend = self.align_binary(minuend, subtrahend)
+        minuend, subtrahend = self.align_bin(minuend, subtrahend)
 
         subtrahend = subtrahend[::-1]
         complement = ""
 
-        for i in range(len(subtrahend)):  # cant minus as int, possible trailing 0s
+        for i in range(
+                len(subtrahend)):  # cant minus as int, possible trailing 0s
             if subtrahend[i] == "0":
                 complement += "1"
             elif subtrahend[i] == "1":
@@ -68,7 +69,7 @@ class Number:
 
     def mult(self, multiplicand: str, multiplier: str) -> str:
         multiplier = str(multiplier)[::-1]
-        product = 0
+        product = "0"
 
         for i in range(len(multiplier)):
             if multiplier[i] == "1":
@@ -115,12 +116,6 @@ class Number:
 
         return quotient[ones_loc:]
 
-
-class Binary(Number):
-
-    def __init__(self, a, b, operator):
-        super().__init__(a, b, operator)
-
     def operate(self):
         if self.operator == "+":
             self.result = self.add(self.a, self.b)
@@ -130,6 +125,12 @@ class Binary(Number):
             self.result = self.mult(self.a, self.b)
         elif self.operator == "/":
             self.result = self.div(self.a, self.b)
+
+
+class Binary(Number):
+
+    def __init__(self, a, b, operator):
+        super().__init__(a, b, operator)
 
 
 class Decimal(Number):
@@ -164,8 +165,8 @@ class Decimal(Number):
         return str(output)
 
     def operate(self):
-        self.a = dec_to_bin(self.a)
-        self.b = dec_to_bin(self.b)
+        self.a = self.dec_to_bin(self.a)
+        self.b = self.dec_to_bin(self.b)
         if self.operator == "+":
             self.result = self.add(self.a, self.b)
         elif self.operator == "-":
@@ -174,14 +175,14 @@ class Decimal(Number):
             self.result = self.mult(self.a, self.b)
         elif self.operator == "/":
             self.result = self.div(self.a, self.b)
-        self.result = bin_to_dec(self.result)
+        self.result = self.bin_to_dec(self.result)
 
 
 class Hexadecimal(Number):
 
     def __init__(self, a, b, operator):
         super().__init__(a, b, operator)
-        self.hexbin = {
+        self.hex_bin_dict = {
             "0": "0000",
             "1": "0001",
             "2": "0010",
@@ -203,7 +204,7 @@ class Hexadecimal(Number):
     def hex_to_bin(self, hexadecimal: str) -> str:
         output = ""
         for i in hexadecimal:
-            output += self.hexbin[i]
+            output += self.hex_bin_dict[i]
 
         ones_loc = self.ones_loc(output)
 
@@ -217,18 +218,18 @@ class Hexadecimal(Number):
             binary_ls.append(binary[:4])
             binary = binary[4:]
 
-        hexbin_keys = list(self.hexbin.keys())
-        hexbin_values = list(self.hexbin.values())
+        hex_bin_keys = list(self.hex_bin_dict.keys())
+        hex_bin_values = list(self.hex_bin_dict.values())
 
         output = ""
         for i in binary_ls:
-            output += hexbin_keys[hexbin_values.index(i)]
+            output += hex_bin_keys[hex_bin_values.index(i)]
 
         return output
 
     def operate(self):
-        self.a = hex_to_bin(self.a)
-        self.b = hex_to_bin(self.b)
+        self.a = self.hex_to_bin(self.a)
+        self.b = self.hex_to_bin(self.b)
         if self.operator == "+":
             self.result = self.add(self.a, self.b)
         elif self.operator == "-":
@@ -237,15 +238,11 @@ class Hexadecimal(Number):
             self.result = self.mult(self.a, self.b)
         elif self.operator == "/":
             self.result = self.div(self.a, self.b)
-        self.result = bin_to_hex(self.result)
+        self.result = self.bin_to_hex(self.result)
 
 
-def main(): # add error trapping before data sent off to classes to calculate
-    num_systems = {
-        1: "binary",
-        2: "decimal",
-        3: "hexadecimal"
-    }
+def main():
+    num_systems = {1: "binary", 2: "decimal", 3: "hexadecimal"}
 
     operations = {
         "+": "addition",
@@ -254,24 +251,43 @@ def main(): # add error trapping before data sent off to classes to calculate
         "/": "division"
     }
 
+    digits = [
+        "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D",
+        "E", "F"
+    ]
+
     print("Welcome to the programmer's calculator")
 
-    a = input("\nEnter the first number\n- ").strip()
-    b = input("\nEnter the second number\n- ").strip()
+    a = input("\nEnter the first number\n- ").strip().upper()
+    b = input("\nEnter the second number\n- ").strip().upper()
     operator = input("\nEnter the operator (+, -, *, /)\n- ").strip()
 
-    test = Decimal(a, b, None)
-    try:
-        test.bin_to_dec(test.a)
-        test.bin_to_dec(test.b)
+    if operator not in operations:
+        print("\nInvalid input: Operator must be +, -, *, or /")
+        return
+
+    test_bin = f"{a}{b}"
+    test_dec = f"{a}{b}"
+    test_hex = f"{a}{b}"
+
+    for i in range(len(digits[:2])):
+        test_bin = test_bin.replace(digits[i], "")
+
+    for i in range(len(digits[:10])):
+        test_dec = test_dec.replace(digits[i], "")
+
+    for i in range(len(digits[:16])):
+        test_hex = test_hex.replace(digits[i], "")
+
+    if not test_bin:
         num_sys = 1
-    except ValueError:
-        try:
-            test.dec_to_bin(test.a)
-            test.dec_to_bin(test.b)
-            num_sys = 2
-        except ValueError:
-            num_sys = 3
+    elif not test_dec:
+        num_sys = 2
+    elif not test_hex:
+        num_sys = 3
+    else:
+        print("\nInvalid input: A, B must be of valid number system")
+        return
 
     print(f"\nTrying to do {num_systems[num_sys]} {operations[operator]}?")
     correct_num_sys = input("Y/N: ").strip()
@@ -280,47 +296,27 @@ def main(): # add error trapping before data sent off to classes to calculate
         print("\nEnter number corresponding to number system to calc in:")
         num_sys = int(input("1. Binary\n2. Decimal\n3. Hexadecimal\n- "))
 
-    if num_sys == 1:
+        if num_sys not in num_systems:
+            print("\nInvalid input: Number system must be 1, 2, or 3")
+            return
+
+    if num_sys == 1 and not test_bin:
         calc = Binary(a, b, operator)
 
-    elif num_sys == 2:
+    elif num_sys == 2 and not test_dec:
         calc = Decimal(a, b, operator)
 
-    elif num_sys == 3:
+    elif num_sys == 3 and not test_hex:
         calc = Hexadecimal(a, b, operator)
 
-    try:
-        calc.operate()
-    except ValueError:
-        print("Calculation could not be performed: Invalid input.")
+    else:
+        print("\nInvalid input: A, B must be valid for selected number system")
+        return
+
+    calc.operate()
 
     print(f"\nIn {num_systems[num_sys]}, {a} {operator} {b} = {calc.result}")
 
+
 if __name__ == "__main__":
     main()
-
-a = "0"
-b = "1"
-
-chars = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"]
-
-# valid input checking
-if (a.isdecimal() and "\\u" not in a 
-    and b.isdecimal() and "\\u" not in b):
-    print("Calculation could not be performed: Invalid decimal.")
-
-# remove 0 and 1 from string, checks that there is nothing remaining
-if (a.replace("0", "").replace("1", "") == "" and
-    b.replace("0", "").replace("1", "") == ""):
-    binary = True
-
-# checks if string is decimal, also checks that no unicode characters present
-if (a.isdecimal() and
-    b.isdecimal() and
-    "\\u" not in a and
-    "\\u" not in b):
-    decimal = True
-
-if 
-
-if 
