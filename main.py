@@ -6,21 +6,11 @@ class Number:
         self.operator = operator
         self.result = ""
 
-    def align_bin(self, bin_a: str, bin_b: str) -> tuple[str, str]:
-        if len(bin_a) < len(bin_b):
-            bin_a = "0" * (len(bin_b) - len(bin_a)) + bin_a
-        elif len(bin_b) < len(bin_a):
-            bin_b = "0" * (len(bin_a) - len(bin_b)) + bin_b
-        return bin_a, bin_b
-
-    def ones_loc(self, binary: str) -> int:
-        for i in range(len(binary)):
-            if binary[i] == "1":
-                return i
-        return 0
-
     def add(self, addend_a: str, addend_b: str) -> str:
-        addend_a, addend_b = self.align_bin(addend_a, addend_b)
+        if len(addend_a) < len(addend_b):
+            addend_a = "0" * (len(addend_b) - len(addend_a)) + addend_a
+        elif len(addend_b) < len(addend_a):
+            addend_b = "0" * (len(addend_a) - len(addend_b)) + addend_b
 
         addend_a = addend_a[::-1]
         addend_b = addend_b[::-1]
@@ -48,7 +38,10 @@ class Number:
         return total[::-1]
 
     def subt(self, minuend: str, subtrahend: str) -> str:
-        minuend, subtrahend = self.align_bin(minuend, subtrahend)
+        if len(minuend) < len(subtrahend):
+            minuend = "0" * (len(subtrahend) - len(minuend)) + minuend
+        elif len(subtrahend) < len(minuend):
+            subtrahend = "0" * (len(minuend) - len(subtrahend)) + subtrahend
 
         subtrahend = subtrahend[::-1]
         complement = ""
@@ -63,7 +56,10 @@ class Number:
         complement = self.add(complement[::-1], "1")
         difference = self.add(minuend, complement)[-len(subtrahend):]
 
-        ones_loc = self.ones_loc(difference)
+        ones_loc = 0
+        for i in range(len(difference)):
+            if difference[i] == "1":
+                ones_loc = i
 
         return difference[ones_loc:]
 
@@ -112,7 +108,10 @@ class Number:
                 quotient += "0"
             length -= 1
 
-        ones_loc = self.ones_loc(quotient)
+        ones_loc = 0
+        for i in range(len(quotient)):
+            if quotient[i] == "1":
+                ones_loc = i
 
         return quotient[ones_loc:]
 
