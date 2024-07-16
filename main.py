@@ -5,8 +5,21 @@ class Number:
         self.b = b
         self.operator = operator
         self.result = ""
+        self.bin_dig = ["0", "1"]
+
+    def check_binary(self, *argv):
+        for i in argv:
+            if not isinstance(i, str):
+                return False
+            for j in i:
+                if j not in self.bin_dig:
+                    return False
+        return True
 
     def add(self, addend_a: str, addend_b: str) -> str:
+        if not self.check_binary(addend_a, addend_b):
+            return "0"
+
         if len(addend_a) < len(addend_b):
             addend_a = "0" * (len(addend_b) - len(addend_a)) + addend_a
         elif len(addend_b) < len(addend_a):
@@ -15,7 +28,7 @@ class Number:
         addend_a = addend_a[::-1]
         addend_b = addend_b[::-1]
         carry = 0
-        total = ""  # cant use sum as var name, re. builtin function
+        total = ""
 
         for i in range(len(addend_a)):
             result = int(addend_a[i]) + int(addend_b[i]) + carry
@@ -38,6 +51,9 @@ class Number:
         return total[::-1]
 
     def subt(self, minuend: str, subtrahend: str) -> str:
+        if not self.check_binary(minuend, subtrahend):
+            return "0"
+
         if len(minuend) < len(subtrahend):
             minuend = "0" * (len(subtrahend) - len(minuend)) + minuend
         elif len(subtrahend) < len(minuend):
@@ -46,8 +62,7 @@ class Number:
         subtrahend = subtrahend[::-1]
         complement = ""
 
-        for i in range(
-                len(subtrahend)):  # cant minus as int, possible trailing 0s
+        for i in range(len(subtrahend)):
             if subtrahend[i] == "0":
                 complement += "1"
             elif subtrahend[i] == "1":
@@ -60,10 +75,14 @@ class Number:
         for i in range(len(difference)):
             if difference[i] == "1":
                 ones_loc = i
+                break
 
         return difference[ones_loc:]
 
     def mult(self, multiplicand: str, multiplier: str) -> str:
+        if not self.check_binary(multiplicand, multiplier):
+            return "0"
+
         multiplier = str(multiplier)[::-1]
         product = "0"
 
@@ -74,6 +93,9 @@ class Number:
         return str(product)
 
     def div(self, dividend: str, divisor: str) -> str:
+        if not self.check_binary(dividend, divisor):
+            return "0"
+
         if divisor == "0":
             return "0"
         elif divisor == "1":
@@ -112,6 +134,7 @@ class Number:
         for i in range(len(quotient)):
             if quotient[i] == "1":
                 ones_loc = i
+                break
 
         return quotient[ones_loc:]
 
@@ -136,8 +159,21 @@ class Decimal(Number):
 
     def __init__(self, a, b, operator):
         super().__init__(a, b, operator)
+        self.dec_dig = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+
+    def check_decimal(self, *argv):
+        for i in argv:
+            if not isinstance(i, str):
+                return False
+            for j in i:
+                if j not in self.dec_dig:
+                    return False
+        return True
 
     def dec_to_bin(self, decimal: str) -> str:
+        if not self.check_decimal(decimal):
+            return "0"
+
         decimal = int(decimal)
         ceiling = 0
         for i in range(decimal):
@@ -156,6 +192,9 @@ class Decimal(Number):
         return output
 
     def bin_to_dec(self, binary: str) -> str:
+        if not self.check_binary(binary):
+            return "0"
+
         output = 0
         binary = str(binary)[::-1]
         for i in range(len(binary)):
@@ -181,38 +220,47 @@ class Hexadecimal(Number):
 
     def __init__(self, a, b, operator):
         super().__init__(a, b, operator)
-        self.hex_bin_dict = {
-            "0": "0000",
-            "1": "0001",
-            "2": "0010",
-            "3": "0011",
-            "4": "0100",
-            "5": "0101",
-            "6": "0110",
-            "7": "0111",
-            "8": "1000",
-            "9": "1001",
-            "A": "1010",
-            "B": "1011",
-            "C": "1100",
-            "D": "1101",
-            "E": "1110",
-            "F": "1111"
-        }
+        self.hex_dig = [
+            "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C",
+            "D", "E", "F"
+        ]
+
+        self.hex_binaries = [
+            "0000", "0001", "0010", "0011", "0100", "0101", "0110", "0111",
+            "1000", "1001", "1010", "1011", "1100", "1101", "1110", "1111"
+        ]
+
+    def check_hexadecimal(self, *argv):
+        for i in argv:
+            if not isinstance(i, str):
+                return False
+            for j in i:
+                if j not in self.hex_dig:
+                    return False
+        return True
 
     def hex_to_bin(self, hexadecimal: str) -> str:
+        if not self.check_hexadecimal(hexadecimal):
+            return "0"
+
         output = ""
-        for i in hexadecimal:
-            output += self.hex_bin_dict[i]
+        for i in range(len(hexadecimal)):
+            for j in range(len(self.hex_dig)):
+                if hexadecimal[i] == self.hex_dig[j]:
+                    output += self.hex_binaries[j]
 
         ones_loc = 0
         for i in range(len(output)):
             if output[i] == "1":
                 ones_loc = i
+                break
 
         return output[ones_loc:]
 
     def bin_to_hex(self, binary: str) -> str:
+        if not self.check_binary(binary):
+            return "0"
+
         binary = "0" * (4 - len(binary) % 4) + binary
 
         binary_ls = []
@@ -220,12 +268,9 @@ class Hexadecimal(Number):
             binary_ls.append(binary[:4])
             binary = binary[4:]
 
-        hex_bin_keys = list(self.hex_bin_dict.keys())
-        hex_bin_values = list(self.hex_bin_dict.values())
-
         output = ""
         for i in binary_ls:
-            output += hex_bin_keys[hex_bin_values.index(i)]
+            output += self.hex_dig[self.hex_binaries.index(i)]
 
         return output
 
