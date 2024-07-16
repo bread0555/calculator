@@ -289,7 +289,11 @@ class Hexadecimal(Number):
 
 
 def main():
-    num_systems = {1: "binary", 2: "decimal", 3: "hexadecimal"}
+    num_systems = {
+        1: "binary",
+        2: "decimal",
+        3: "hexadecimal"
+    }
 
     operations = {
         "+": "addition",
@@ -313,24 +317,23 @@ def main():
         print("\nInvalid input: Operator must be +, -, *, or /")
         return
 
-    test_bin = f"{a}{b}"
-    test_dec = f"{a}{b}"
-    test_hex = f"{a}{b}"
+    test = Binary(None, None, None)
+    test_bin = test.check_binary(f"{a}{b}")
+    del test
 
-    for i in range(len(digits[:2])):
-        test_bin = test_bin.replace(digits[i], "")
+    test = Decimal(None, None, None)
+    test_dec = test.check_decimal(f"{a}{b}")
+    del test
 
-    for i in range(len(digits[:10])):
-        test_dec = test_dec.replace(digits[i], "")
+    test = Hexadecimal(None, None, None)
+    test_hex = test.check_hexadecimal(f"{a}{b}")
+    del test
 
-    for i in range(len(digits[:16])):
-        test_hex = test_hex.replace(digits[i], "")
-
-    if not test_bin:
+    if test_bin:
         num_sys = 1
-    elif not test_dec:
+    elif test_dec:
         num_sys = 2
-    elif not test_hex:
+    elif test_hex:
         num_sys = 3
     else:
         print("\nInvalid input: A, B must be of valid number system")
@@ -347,13 +350,13 @@ def main():
             print("\nInvalid input: Number system must be 1, 2, or 3")
             return
 
-    if num_sys == 1 and not test_bin:
+    if num_sys == 1 and test_bin:
         calc = Binary(a, b, operator)
 
-    elif num_sys == 2 and not test_dec:
+    elif num_sys == 2 and test_dec:
         calc = Decimal(a, b, operator)
 
-    elif num_sys == 3 and not test_hex:
+    elif num_sys == 3 and test_hex:
         calc = Hexadecimal(a, b, operator)
 
     else:
