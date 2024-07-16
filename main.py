@@ -205,7 +205,10 @@ class Hexadecimal(Number):
         for i in hexadecimal:
             output += self.hex_bin_dict[i]
 
-        ones_loc = self.ones_loc(output)
+        ones_loc = 0
+        for i in range(len(output)):
+            if output[i] == "1":
+                ones_loc = i
 
         return output[ones_loc:]
 
