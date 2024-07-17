@@ -7,13 +7,13 @@ class Number:
         self.result = ""
         self.bin_dig = ["0", "1"]
 
-    def check_binary(self, *argv):
-        for i in argv:
-            if not isinstance(i, str):
+    def check_binary(self, a, b="0") -> bool:
+        if not isinstance(a, str) or not isinstance(b, str):
+            return False
+        ab = f"{a}{b}"
+        for i in ab:
+            if i not in self.bin_dig:
                 return False
-            for j in i:
-                if j not in self.bin_dig:
-                    return False
         return True
 
     def add(self, addend_a: str, addend_b: str) -> str:
@@ -96,14 +96,12 @@ class Number:
         if not self.check_binary(dividend, divisor):
             return "0"
 
-        if divisor == "0":
-            return "0"
-        elif divisor == "1":
+        if divisor == "1":
             return dividend
-        elif len(dividend) < len(divisor):
-            return "0"
         elif dividend == divisor:
             return "1"
+        elif divisor == "0" or len(dividend) < len(divisor):
+            return "0"
 
         quotient = ""
         length = len(dividend)
@@ -161,13 +159,13 @@ class Decimal(Number):
         super().__init__(a, b, operator)
         self.dec_dig = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
 
-    def check_decimal(self, *argv):
-        for i in argv:
-            if not isinstance(i, str):
+    def check_decimal(self, a, b="0") -> bool:
+        if not isinstance(a, str) or not isinstance(b, str):
+            return False
+        ab = f"{a}{b}"
+        for i in ab:
+            if i not in self.dec_dig:
                 return False
-            for j in i:
-                if j not in self.dec_dig:
-                    return False
         return True
 
     def dec_to_bin(self, decimal: str) -> str:
@@ -230,13 +228,13 @@ class Hexadecimal(Number):
             "1000", "1001", "1010", "1011", "1100", "1101", "1110", "1111"
         ]
 
-    def check_hexadecimal(self, *argv):
-        for i in argv:
-            if not isinstance(i, str):
+    def check_hexadecimal(self, a, b="0") -> bool:
+        if not isinstance(a, str) or not isinstance(b, str):
+            return False
+        ab = f"{a}{b}"
+        for i in ab:
+            if i not in self.hex_dig:
                 return False
-            for j in i:
-                if j not in self.hex_dig:
-                    return False
         return True
 
     def hex_to_bin(self, hexadecimal: str) -> str:
@@ -301,11 +299,6 @@ def main():
         "*": "multiplication",
         "/": "division"
     }
-
-    digits = [
-        "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D",
-        "E", "F"
-    ]
 
     print("Welcome to the programmer's calculator")
 
