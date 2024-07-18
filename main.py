@@ -8,8 +8,15 @@ class Number:
         self.bin_dig = ["0", "1"]
 
     def check_binary(self, a, b="0") -> bool:
+        if isinstance(a, int):
+            a = str(a)
+
+        if isinstance(b, int):
+            b = str(b)
+
         if not isinstance(a, str) or not isinstance(b, str):
             return False
+
         ab = f"{a}{b}"
         for i in ab:
             if i not in self.bin_dig:
@@ -160,8 +167,15 @@ class Decimal(Number):
         self.dec_dig = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
 
     def check_decimal(self, a, b="0") -> bool:
+        if isinstance(a, int):
+            a = str(a)
+
+        if isinstance(b, int):
+            b = str(b)
+
         if not isinstance(a, str) or not isinstance(b, str):
             return False
+
         ab = f"{a}{b}"
         for i in ab:
             if i not in self.dec_dig:
@@ -174,7 +188,7 @@ class Decimal(Number):
 
         decimal = int(decimal)
         ceiling = 0
-        for i in range(decimal):
+        for i in range(int(decimal)):
             if 2**i >= decimal:
                 ceiling = i
                 break
@@ -231,6 +245,7 @@ class Hexadecimal(Number):
     def check_hexadecimal(self, a, b="0") -> bool:
         if not isinstance(a, str) or not isinstance(b, str):
             return False
+
         ab = f"{a}{b}"
         for i in ab:
             if i not in self.hex_dig:
@@ -287,11 +302,7 @@ class Hexadecimal(Number):
 
 
 def main():
-    num_systems = {
-        1: "binary",
-        2: "decimal",
-        3: "hexadecimal"
-    }
+    num_systems = {1: "binary", 2: "decimal", 3: "hexadecimal"}
 
     operations = {
         "+": "addition",
