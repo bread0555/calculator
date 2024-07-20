@@ -105,7 +105,7 @@ class Number:
 
         if divisor == "1":
             return dividend
-        elif dividend == divisor:
+        elif divisor == dividend:
             return "1"
         elif divisor == "0" or len(dividend) < len(divisor):
             return "0"
@@ -114,9 +114,8 @@ class Number:
         length = len(dividend)
 
         for i in range(len(dividend) - len(divisor), -1, -1):
-            div_temp = divisor
+            div_temp = divisor + "0" * i
             divisible = True
-            div_temp = div_temp + "0" * i
             if len(dividend) < length:
                 dividend = "0" * (length - len(dividend)) + dividend
             elif len(dividend) > length:
