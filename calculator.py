@@ -3,7 +3,10 @@ class Number:
     def __init__(self, a, b, operator):
         self.a = a
         self.b = b
-        self.operator = operator
+        if self.check_operator(operator):
+            self.operator = operator
+        else:
+            self.operator = "+"
         self.result = ""
         self.bin_dig = ["0", "1"]
 
@@ -21,6 +24,16 @@ class Number:
         for i in ab:
             if i not in self.bin_dig:
                 return False
+        return True
+
+    def check_operator(self, operator) -> bool:
+        operators = ["+", "-", "*", "/"]
+        if not isinstance(operator, str):
+            return False
+
+        if operator not in operators:
+            return False
+
         return True
 
     def add(self, addend_a: str, addend_b: str) -> str:
@@ -164,6 +177,14 @@ class Decimal(Number):
     def __init__(self, a, b, operator):
         super().__init__(a, b, operator)
         self.dec_dig = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+        if self.check_decimal(a):
+            self.a = a
+        else:
+            self.a = "0"
+        if self.check_decimal(b):
+            self.b = b
+        else:
+            self.b = "0"
 
     def check_decimal(self, a, b="0") -> bool:
         if isinstance(a, int):
@@ -235,6 +256,14 @@ class Hexadecimal(Number):
             "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C",
             "D", "E", "F"
         ]
+        if self.check_hexadecimal(a):
+            self.a = a
+        else:
+            self.a = "0"
+        if self.check_hexadecimal(b):
+            self.b = b
+        else:
+            self.b = "0"
 
         self.hex_binaries = [
             "0000", "0001", "0010", "0011", "0100", "0101", "0110", "0111",
