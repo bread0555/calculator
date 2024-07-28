@@ -27,10 +27,7 @@ class Number:
             return False
 
         ab = f"{a}{b}"
-        for i in ab:
-            if i not in self.bin_dig:
-                return False
-        return True
+        return all(i in self.bin_dig for i in ab)
 
     def check_operator(self, operator) -> bool:
         operators = ["+", "-", "*", "/"]
@@ -203,10 +200,7 @@ class Decimal(Number):
             return False
 
         ab = f"{a}{b}"
-        for i in ab:
-            if i not in self.dec_dig:
-                return False
-        return True
+        return all(i in self.dec_dig for i in ab)
 
     def dec_to_bin(self, decimal: str) -> str:
         if not self.check_decimal(decimal):
@@ -281,10 +275,7 @@ class Hexadecimal(Number):
             return False
 
         ab = f"{a}{b}"
-        for i in ab:
-            if i not in self.hex_dig:
-                return False
-        return True
+        return all(i in self.hex_dig for i in ab)
 
     def hex_to_bin(self, hexadecimal: str) -> str:
         if not self.check_hexadecimal(hexadecimal):
