@@ -1,14 +1,20 @@
 class Number:
 
     def __init__(self, a, b, operator):
-        self.a = a
-        self.b = b
+        self.bin_dig = ["0", "1"]
+        if self.check_binary(a):
+            self.a = a
+        else:
+            self.a = "0"
+        if self.check_binary(b):
+            self.b = b
+        else:
+            self.b = "0"
         if self.check_operator(operator):
             self.operator = operator
         else:
             self.operator = "+"
         self.result = ""
-        self.bin_dig = ["0", "1"]
 
     def check_binary(self, a, b="0") -> bool:
         if isinstance(a, int):
