@@ -372,7 +372,7 @@ def main():
     correct_num_sys = input("Y/N: ").strip()
 
     if correct_num_sys.upper() != "Y":
-        print("\nEnter number corresponding to number system to calc in:")
+        print("\nEnter number corresponding to number system to calculate in:")
         num_sys = int(input("1. Binary\n2. Decimal\n3. Hexadecimal\n- "))
 
         if num_sys not in num_systems:
