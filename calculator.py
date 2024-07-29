@@ -340,10 +340,10 @@ def main():
 
     print("\nInstructons:")
     print("1. Enter two numbers from the same number system.")
-    print("2. Enter the operator.")
+    print("2. Enter an operator (+, -, *, /).")
     print("3. Select the number system that your two numbers are in.")
     print("4. The result will be displayed in the number system you selected.")
-    input("\nPress enter to continue.")
+    input("\nPress enter to continue ")
 
     a = input("\nEnter the first number\n- ").strip().upper()
     b = input("\nEnter the second number\n- ").strip().upper()
@@ -378,7 +378,7 @@ def main():
     print(f"\nTrying to do {num_systems[num_sys]} {operations[operator]}?")
     correct_num_sys = input("Y/N: ").strip()
 
-    if correct_num_sys.upper() != "Y":
+    if correct_num_sys.upper() != "Y" and correct_num_sys:
         print("\nEnter number corresponding to number system to calculate in:")
         num_sys = int(input("1. Binary\n2. Decimal\n3. Hexadecimal\n- "))
 
