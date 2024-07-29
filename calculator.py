@@ -338,6 +338,13 @@ def main():
 
     print("Welcome to the programmer's calculator")
 
+    print("\nInstructons:")
+    print("1. Enter two numbers from the same number system.")
+    print("2. Enter the operator.")
+    print("3. Select the number system that your two numbers are in.")
+    print("4. The result will be displayed in the number system you selected.")
+    input("\nPress enter to continue.")
+
     a = input("\nEnter the first number\n- ").strip().upper()
     b = input("\nEnter the second number\n- ").strip().upper()
     operator = input("\nEnter the operator (+, -, *, /)\n- ").strip()
