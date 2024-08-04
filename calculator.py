@@ -489,7 +489,7 @@ class Decimal(Number):
         #  return output as a string
         return str(output)
 
-    #  define check_operator function
+    #  define operate function
     def operate(self):
         """
         Coordinates the execution of binary arithmetic methods in Decimal.
@@ -645,6 +645,7 @@ class Hexadecimal(Number):
         #  return output as a string
         return output
 
+    #  define operate function
     def operate(self):
         """
         Coordinates the execution of binary arithmetic methods in Hexadecimal.
